@@ -1,5 +1,4 @@
 ﻿using Ionic.Zip;
-using NUnrar;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -79,7 +78,7 @@ namespace MX_Simulator_Mod_Manager
                     }
                     else if (checkExtension() == "rar")
                     {
-                        registerRarMod();
+                        //registerRarMod();
                     }
                     else if (checkExtension() == "saf")
                     {
@@ -106,7 +105,7 @@ namespace MX_Simulator_Mod_Manager
                     }
                     else if (checkExtension() == "rar")
                     {
-                        registerRarMod();
+                        //registerRarMod();
                     }
                     else if (checkExtension() == "saf")
                     {
@@ -148,9 +147,8 @@ namespace MX_Simulator_Mod_Manager
                 }
             }
         }
-        private void registerRarMod()
+        /*private void registerRarMod()
         {
-            RarArchive archive = RarArchive.Open(vManager.getActiveMod());
             foreach (RarArchiveEntry e in archive.Entries)
             {
                 if (trackRadioBtn.Checked == true)
@@ -166,7 +164,7 @@ namespace MX_Simulator_Mod_Manager
                     //dbManager.updateGearpackDatabaseRar(e, vManager.getActiveMod());
                 }
             }
-        }
+        }*/
         private void registerSafMod()
         {
             if(trackRadioBtn.Checked == true)

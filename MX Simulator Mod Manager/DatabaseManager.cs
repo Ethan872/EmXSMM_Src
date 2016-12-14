@@ -1,4 +1,5 @@
 ﻿using Ionic.Zip;
+using SharpCompress.Archive.Rar;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,7 +79,7 @@ namespace MX_Simulator_Mod_Manager
             newMod.InnerText = e.FileName; //Write mod contents to mod entry
             xDoc.Save("emXS_gearDB.xml");
         }
-        public void updateTrackDatabaseRar(RarArchiveEntry e, string mod)
+        /*public void updateTrackDatabaseRar(RarArchiveEntry e, string mod)
         {
             
             string modName = Path.GetFileNameWithoutExtension(mod);
@@ -92,7 +93,7 @@ namespace MX_Simulator_Mod_Manager
             newMod.Attributes.Append(modNameAttribute); //Write attribute to mod entry
             newMod.InnerText = e.FilePath; //Write mod contents to mod entry
             xDoc.Save("emXS_trackDB.xml");
-        }
+        }*/
 
         public void checkDatabases()
         {
