@@ -1,3 +1,3 @@
-Copyright (c) Ethan87
+Copyright © Ethan Jaramillo
 
 All rights reserved.
