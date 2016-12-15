@@ -1,5 +1,7 @@
 ﻿using Ionic.Zip;
 using SharpCompress.Archive.Rar;
+using SharpCompress.Common;
+using SharpCompress.Reader;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,6 +67,24 @@ namespace MX_Simulator_Mod_Manager
             newMod.InnerText = e.FileName; //Write mod contents to mod entry
             xDoc.Save("emXS_trackDB.xml");
         }
+        public void updateTrackDatabaseRar(string e, string mod, bool isDirectory)
+        {
+            if (isDirectory)
+            {
+
+            }
+            string modName = Path.GetFileNameWithoutExtension(mod);
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load("emXS_trackDB.xml");
+            XmlNode rootElement = xDoc.SelectSingleNode("trackDB"); //Select root element
+            XmlElement newMod = xDoc.CreateElement("mod"); //Create another element / mod entry
+            XmlAttribute modNameAttribute = xDoc.CreateAttribute("name"); //Create attribute for mod name
+            modNameAttribute.Value = modName; //Set attribute to mod name
+            rootElement.AppendChild(newMod); //Write mod entry to file
+            newMod.Attributes.Append(modNameAttribute); //Write attribute to mod entry
+            newMod.InnerText = e.ToString(); //Write mod contents to mod entry
+            xDoc.Save("emXS_trackDB.xml");
+        }
         public void updateGearpackDatabaseZip(Ionic.Zip.ZipEntry e, string mod)
         {
             string modName = Path.GetFileNameWithoutExtension(mod);
@@ -79,7 +99,7 @@ namespace MX_Simulator_Mod_Manager
             newMod.InnerText = e.FileName; //Write mod contents to mod entry
             xDoc.Save("emXS_gearDB.xml");
         }
-        /*public void updateTrackDatabaseRar(RarArchiveEntry e, string mod)
+        public void updateTrackDatabaseRar(String e, string mod)
         {
             
             string modName = Path.GetFileNameWithoutExtension(mod);
@@ -91,9 +111,9 @@ namespace MX_Simulator_Mod_Manager
             modNameAttribute.Value = modName; //Set attribute to mod name
             rootElement.AppendChild(newMod); //Write mod entry to file
             newMod.Attributes.Append(modNameAttribute); //Write attribute to mod entry
-            newMod.InnerText = e.FilePath; //Write mod contents to mod entry
+            newMod.InnerText = e; //Write mod contents to mod entry
             xDoc.Save("emXS_trackDB.xml");
-        }*/
+        }
 
         public void checkDatabases()
         {
@@ -210,7 +230,14 @@ namespace MX_Simulator_Mod_Manager
         }
         public void installRarMod(string rarModToInstall)
         {
-            
+            using (Stream stream = File.OpenRead(rarModToInstall))
+            {
+                var reader = ReaderFactory.Open(stream);
+                while (reader.MoveToNextEntry())
+                {
+                    reader.WriteEntryToDirectory(startupRoutine.getMXSDirectory(), ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
+                }
+            }
         }
 
         public void removeSelectedModFiles(String[] checkedItems, XmlNodeList xList, string modEnviron, XmlDocument loadedDB)
