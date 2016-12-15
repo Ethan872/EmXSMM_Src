@@ -1,3 +1,3 @@
-Copyright © Ethan Jaramillo
+Copyright © by Ethan Jaramillo
 
 All rights reserved.
