@@ -235,14 +235,7 @@ namespace MX_Simulator_Mod_Manager
                 var reader = ReaderFactory.Open(stream);
                 while (reader.MoveToNextEntry())
                 {
-                    if (!reader.Entry.IsDirectory)
-                    {
-                        reader.WriteEntryToDirectory(startupRoutine.getMXSDirectory(), ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
-                    }
-                    else if(reader.Entry.IsDirectory)
-                    {
-                        reader.WriteEntryToDirectory(startupRoutine.getMXSDirectory(), ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
-                    }
+                    reader.WriteEntryToDirectory(startupRoutine.getMXSDirectory(), ExtractOptions.ExtractFullPath | ExtractOptions.Overwrite);
                 }
             }
         }

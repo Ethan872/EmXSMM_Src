@@ -3,6 +3,10 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SharpCompress.Archive.Rar;
+using SharpCompress.Reader.Rar;
+using SharpCompress.Common.Rar;
+
 namespace MX_Simulator_Mod_Manager
 {
 
@@ -78,7 +82,7 @@ namespace MX_Simulator_Mod_Manager
                     }
                     else if (checkExtension() == "rar")
                     {
-                        //registerRarMod();
+                        registerRarMod();
                     }
                     else if (checkExtension() == "saf")
                     {
@@ -105,7 +109,7 @@ namespace MX_Simulator_Mod_Manager
                     }
                     else if (checkExtension() == "rar")
                     {
-                        //registerRarMod();
+                        registerRarMod();
                     }
                     else if (checkExtension() == "saf")
                     {
@@ -147,24 +151,40 @@ namespace MX_Simulator_Mod_Manager
                 }
             }
         }
-        /*private void registerRarMod()
+        private void registerRarMod()
         {
-            foreach (RarArchiveEntry e in archive.Entries)
+            using (RarArchive rar = RarArchive.Open(vManager.getActiveMod()))
             {
-                if (trackRadioBtn.Checked == true)
+                foreach (RarArchiveEntry e in rar.Entries)
                 {
-                    dbManager.updateTrackDatabaseRar(e, vManager.getActiveMod());
-                }
-                else if (bikeRadioBtn.Checked == true)
-                {
-                    //updateBikeDatabase(e);
-                }
-                else if (gearPackRadioBtn.Checked == true)
-                {
-                    //dbManager.updateGearpackDatabaseRar(e, vManager.getActiveMod());
+                    String entryWithPath = e.FilePath;
+                    String entryWithoutPath = Path.GetFileName(entryWithPath);
+                    if (trackRadioBtn.Checked == true)
+                    {
+                        if (e.IsDirectory)
+                        {
+                            MessageBox.Show(entryWithoutPath + " is a dir");
+                            dbManager.updateTrackDatabaseRar(entryWithoutPath, vManager.getActiveMod(), true);
+                            break;
+                        }
+                        else
+                        {
+                            MessageBox.Show(entryWithoutPath + " is not a dir");
+                            continue;
+                            //dbManager.updateTrackDatabaseRar(entryWithoutPath, vManager.getActiveMod(), false);
+                        }
+                    }
+                    else if (bikeRadioBtn.Checked == true)
+                    {
+                        //updateBikeDatabase(e);
+                    }
+                    else if (gearPackRadioBtn.Checked == true)
+                    {
+                        //dbManager.updateGearpackDatabaseRar(entryWithoutPath, vManager.getActiveMod());
+                    }
                 }
             }
-        }*/
+        }
         private void registerSafMod()
         {
             if(trackRadioBtn.Checked == true)
@@ -404,20 +424,8 @@ namespace MX_Simulator_Mod_Manager
                 {
                     if (selectedNode.Attributes[0].Value == selectedMod)
                     {
-                        //MessageBox.Show("Will delete: " + selectedNode.InnerText);
-                        FileAttributes attr = File.GetAttributes(startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText);
-                        if (attr.HasFlag(FileAttributes.Directory))
-                        {
-                            //MessageBox.Show("Its a directory");
-                            MessageBox.Show("Will delete: " + startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText);
-                            Directory.Delete(startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText, true);
-                        }
-                        else
-                        {
-                            //MessageBox.Show("Its a file");
-                            MessageBox.Show("Will delete: " + startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText);
-                            File.Delete(startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText);
-                        }
+                        MessageBox.Show("Will delete: " + startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText);
+                        Directory.Delete(startupRoutine.getMXSDirectory() + "\\" + selectedNode.InnerText, true);
                     }
                 }
                 foreach (XmlNode selectedNode in rootNode) //Remove from listbox
